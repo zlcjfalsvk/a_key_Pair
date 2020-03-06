@@ -2,7 +2,7 @@
 
 ## How to run?
 
-npm install
-Uncomment in index.ts
+1. npm install <br />
+2. Uncomment in index.ts
 
 **crypto.ts is support Node v.10+**
