@@ -1,6 +1,11 @@
 import crypto, { generateKeyPair } from "crypto";
 
 
+
+/**
+ * 10 미만의 버전에서 사용한다면 generateKeyPair 지원을 안하여 npm-rsa 모듈을 이용해야한다.
+ * 10 버전에서 이용 한다면 createPrivateKey를 지원을 안한다 => 11.6 버전부터 
+ */
 const a = async (): Promise<{ publicK: string, privateK: string }> => {
     return new Promise((resolve, reject) => {
         generateKeyPair("rsa", {
@@ -36,11 +41,18 @@ export default a().then(r => {
 
     console.log("\r\n");
     console.log("private Key로 복호화");
+    // node 11버전부터 이용 가능
     const key = crypto.createPrivateKey({
         key: r.privateK,
         format: "pem",
         passphrase: "절대로알면 안되는 키"      
     });
+    // node 10 버전 대에서는 다음과 같이 직접 Object 형태로 만들어야한다.
+    // const key = {
+    //     key: r.privateK,
+    //     format: "pem",
+    //     passphrase: "절대로알면 안되는 키"      
+    // };
     const dec = crypto.privateDecrypt(key, Buffer.from(encstr, "base64"));
     const decstr = dec.toString("utf8");
     console.log(decstr);
